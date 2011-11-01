@@ -242,7 +242,7 @@ object Sp32_04b {
 
 // アクターのコードスタイル
 object Sp32_05 {
-  println("")
+  println("this is a pen")
   
   println("end of: " + Thread.currentThread.getStackTrace()(1))
 }
