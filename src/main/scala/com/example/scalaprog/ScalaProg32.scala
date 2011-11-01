@@ -270,7 +270,7 @@ object Sp32_05 {
   }
   sillyActor2 ! "hi there"
 
-  println("this is apne ")
+  println("abc")
   
   println("end of: " + Thread.currentThread.getStackTrace()(1))
 }
