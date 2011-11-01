@@ -242,7 +242,35 @@ object Sp32_04b {
 
 // アクターのコードスタイル
 object Sp32_05 {
-  println("this is a pen")
+
+  import scala.actors._
+  import scala.actors.Actor._
+
+  val sillyActor2 = actor {
+    def emoteLater() {
+      val mainActor = self
+      actor  {
+        Thread.sleep(1000)
+        mainActor ! "Emote"
+      }
+    }
+    var emoted = 0
+    emoteLater()
+    loop {
+      react {
+        case "Emote" =>
+          println("I'm acting!")
+          emoted += 1
+          if (emoted < 5)
+            emoteLater()
+        case msg =>
+          println("Received: " + msg)
+      }
+    }
+  }
+  sillyActor2 ! "hi there"
+
+  println("this is apne ")
   
   println("end of: " + Thread.currentThread.getStackTrace()(1))
 }
