@@ -36,6 +36,8 @@ object Sp32_02a {
 
   SillyActor.start(); SeriousActor.start()
   // Scalaインタプリターで実施すると、コンソールを実行しながらも、「I'm acting!」が表示される。
+
+  println("end of: " + Thread.currentThread.getStackTrace()(1))
 }
 
 // アクターとメッセージ交換 (2)
@@ -342,29 +344,26 @@ object Sp32_06 {
 
   //val circuit = new Circuit with Adders
 
-  object Demo {
-    import com.example.simuration._
+  import com.example.simuration._
 
-    val circuit = new Circuit with Adders
-    import circuit._
+  val circuit = new Circuit with Adders
+  import circuit._
 
-    val ain = new Wire("ain", true)
-    val bin = new Wire("bin", false)
-    val cin = new Wire("cin", true)
-    val sout = new Wire("sout")
-    val cout = new Wire("cout")
+  val ain = new Wire("ain", true)
+  val bin = new Wire("bin", false)
+  val cin = new Wire("cin", true)
+  val sout = new Wire("sout")
+  val cout = new Wire("cout")
 
-    probe(ain)
-    probe(bin)
-    probe(cin)
-    probe(sout)
-    probe(cout)
+  probe(ain)
+  probe(bin)
+  probe(cin)
+  probe(sout)
+  probe(cout)
 
-    fullAdder(ain, bin, cin, sout, cout)
+  fullAdder(ain, bin, cin, sout, cout)
 
-    circuit.start()
-  }
-  Demo
+  circuit.start()
 
   println("end of: " + Thread.currentThread.getStackTrace()(1))
 }
