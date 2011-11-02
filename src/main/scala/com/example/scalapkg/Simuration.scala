@@ -62,7 +62,7 @@ abstract class Simuration {
   def run() {
     // afterDelay(0)=予定表の先頭にコメント出力メソッドを追加
     afterDelay(0) {
-      println("*** simulation started, time = " + currentTime + " *** ")
+      println("### simulation started, time=" + currentTime + " ###")
     }
     //予定表内のアクション実行開始
     // next()を呼び出せるのは、agendaがカラリストでない場合なので、next関数ないの空リスト対応ケースは記載せず、
@@ -105,16 +105,16 @@ abstract class BasicCircuitSimulation extends Simuration {
     // 呼び出されると、入力信号を取得した後、出力信号を反転する別のアクションを予定表に追加する。
     def inverterAction() {
       val inputSig = input.getSignal
-      println("+++ inverterAction +++ in=" + input.getWireID + ":" + inputSig + " | out=" + output.getWireID)
       // afterDelayの第二パラメータ{}は、名前渡しパラメータ
       afterDelay(InverterDelay) { // InverterDelayの値は？ ... CircuitSimulationクラスを呼び出したオブジェクトにて定義
-        //println("### inverterAction - afterDelay ###")
+        // println("### inverterAction - afterDelay ###")
         // output Wireに対し、WireクラスのsetSignalを使って、inputSigの逆の値を追加
         output setSignal !inputSig
       }
     }
     // input Wireに対し、WireクラスのaddActionを使って、inverterActionを追加
     input addAction inverterAction
+    println("[A]inverterAction in: " + input.getWireID + "=" + input.getSignal + " | out: " + output.getWireID)
   }
 
   // "="がある場合、最終的な関数の値が返されるが、戻り値を要求しない関数の為、不要？
@@ -122,38 +122,38 @@ abstract class BasicCircuitSimulation extends Simuration {
     def andAction() = {
       val a1Sig = a1.getSignal
       val a2Sig = a2.getSignal
-      println("+++ andAction +++ in=" + a1.getWireID + ":" + a1Sig + " , "  + a2.getWireID + ":" + a2Sig + " | out=" + output.getWireID)
       // afterDelayの第二パラメータ{}は、名前渡しパラメータ
       afterDelay(AndGateDelay) { // AndGateDelayの値は？ ... CircuitSimulationクラスを呼び出したオブジェクトにて定義
-        //println("### andAction - afterDelay ###")
+        // println("### andAction - afterDelay ###")
         // output Wireに対し、WireクラスのsetSignalを使って、a1Sigとa2Sigの論理積を追加
         output setSignal (a1Sig & a2Sig)
       }
     }
     a1 addAction andAction
     a2 addAction andAction
+    println("[A]andAction in: " + a1.getWireID + "=" + a1.getSignal + ", "  + a2.getWireID + "=" + a2.getSignal + " | out: " + output.getWireID)
   }
 
   def orGate(o1: Wire, o2: Wire, output: Wire) {  // "="がない場合、Unit型固定になる。
     def orAction() {
       val o1Sig = o1.getSignal
       val o2Sig = o2.getSignal
-      println("+++ orAction +++ in=" +  o1.getWireID + ":" + o1Sig + " , "  + o2.getWireID + ":" + o2Sig + " | out=" + output.getWireID)
       // afterDelayの第二パラメータ{}は、名前渡しパラメータ
       afterDelay(OrGateDelay) { // OrGateDelayの値は？ ... CircuitSimulationクラスを呼び出したオブジェクトにて定義
-        //println("### orAction - afterDelay ###")
+        // println("### orAction - afterDelay ###")
         // output Wireに対し、WireクラスのsetSignalを使って、o1Sigとo2Sigの論理和を追加
         output setSignal (o1Sig | o2Sig)
       }
     }
     o1 addAction orAction
     o2 addAction orAction
+    println("[A]orAction in: " +  o1.getWireID + "=" + o1.getSignal + ", "  + o2.getWireID + "=" + o2.getSignal + " | out: " + output.getWireID)
   }
 
   // Wireにプローブ（探測器）を追加する
   def probe(name: String, wire: Wire) {  // "="がない場合、Unit型固定になる。
     def probeAction() {
-      println(name + " " + currentTime + " new-value = " + wire.getSignal)
+      println(name + " time=" + currentTime + " | new-value=" + wire.getSignal)
     }
     wire addAction probeAction
   }
@@ -175,7 +175,8 @@ abstract class CircuitSimulation extends BasicCircuitSimulation {
       halfAdder(a, cin, s, c1)
       halfAdder(b, s, sum, c2)
       orGate(c1, c2, cont)
-      /*
+
+      /* 本来の綺麗な配列？
       halfAdder(a, b, s, c1)
       halfAdder(cin, s, sum, c2)
       orGate(c1, c2, count)

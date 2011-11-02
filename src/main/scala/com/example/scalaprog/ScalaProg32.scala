@@ -210,7 +210,7 @@ object Sp32_04b {
         case _:UnknownHostException => None
       }
     }
-    def show(x: Option[java.net.InetAddress]) =
+    def show(x: Option[InetAddress]) =
       x match {
         case Some(y) => y
         case None    => "Nothing!"
@@ -317,7 +317,7 @@ object Sp32_05_04 {
       }
     }
 
-    def show(x: Option[java.net.InetAddress]) =
+    def show(x: Option[InetAddress]) =
       x match {
         case Some(y) => y.toString
         case None    => "Nothing!"
@@ -333,6 +333,13 @@ object Sp32_05_04 {
   NameResolver2 ! LookupIP("wwwwww.scala-lang.org", self)
   self.receiveWithin(100) { case (x) => println(x) }
   // LookupResult(wwwwww.scala-lang.org,None)
+
+  println("end of: " + Thread.currentThread.getStackTrace()(1))
+}
+
+// 大規模なサンプル：並列拡散イベントシミュレーション
+object Sp32_06 {
+
 
   println("end of: " + Thread.currentThread.getStackTrace()(1))
 }

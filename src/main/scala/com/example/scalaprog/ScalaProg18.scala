@@ -119,6 +119,8 @@ object Sp18_03 {
    */
 
   import com.example.scalapkg._
+
+  // イベントの発生タイミングを指定
   object MySimulation extends CircuitSimulation {
     def InverterDelay = 1
     def AndGateDelay = 3
@@ -127,30 +129,33 @@ object Sp18_03 {
 
   // 第4層：シミューレーション上の回路自体
   import MySimulation._
+  // 配線の要素を作成
+  println("WireProbe")
   val input1, input2, sum, carry = new Wire
-  probe("input1", input1) // WireクラスのactionsリストにaddAction（アクションを追加）
-  probe("input2", input2) // addActionの際にActionを一度実行して、afterDelayによりagenda（予定表）に格納
-  probe("sum", sum)       // Wireの信号(sigVal)が変化した場合に再コールされて、printlnされる。
-  probe("carry", carry)   // 再コールされる理由：setSignalが行われると、Wireに紐づいたactionsが実行されるので
-  // 半加算器の生成＝Wireの生成と、addAction関数コール＝Actionの追加
+  probe("[P]input1", input1) // WireクラスのactionsリストにaddAction（アクションを追加）
+  probe("[P]input2", input2) // addActionの際にActionを一度実行して、afterDelayによりagenda（予定表）に格納
+  probe("[P]sum", sum)        // Wireの信号(sigVal)が変化した場合に再コールされて、printlnされる。
+  probe("[P]carry", carry)   // 再コールされる理由：setSignalが行われると、Wireに紐づいたactionsが実行されるので
+                                // 半加算器の要素の生成＝Wireの生成と、addAction関数コール＝Actionの追加
+  println("\nhalfAdder")
   halfAdder(input1, input2, sum, carry)
 
 
-  println("\nSIMU01")
+  println("\nSIMU-#01")
   // 配線の信号が変わるたびにも実行される（配線の信号が変わった際は配線が保持している全てのアクションが実行される）
   // 理由：WireのActionを実行することで、「output setSignal !inputSig」input値の再定義とafterDelayによる
   // agendaへの再投入が必要だから。
   input1 setSignal true // WireクラスのsetSignalを実行し、actionsリスト内のActionをすべて実行
   run()
 
-  println("\nSIMU02")
+  println("\nSIMU-#02")
   input2 setSignal true
   run()
 
   /*
 
   SIMU01
-  input1 0 new-value = true
+  input1 time: 0 | new-value = true
   *** simulation started, time = 0 ***
   sum 8 new-value = true
 
@@ -160,12 +165,12 @@ object Sp18_03 {
   input1経路の最大値である、Or:5 + And:3のコストがかかった
 
   SIMU02
-  input2 8 new-value = true
+  input2 time: 8 | new-value = true
   *** simulation started, time = 8 ***
   carry 11 new-value = true
   carryが11-8=3秒かかった理由：半加算器の1個目のAnd:3のコストがかかった
 
-  sum 15 new-value = false
+  sum time: 15 | new-value = false
   sumが15-8=7秒かかった理由：
   input2が1（インバータで0に変換）であり、半加算器の2個目のinput1の値待ちが不要
   論理積の場合、0の値が先にきた時点で偽となる）な為、
