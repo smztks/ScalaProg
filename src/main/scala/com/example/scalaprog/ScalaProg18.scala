@@ -118,7 +118,7 @@ object Sp18_03 {
   第4層：シミューレーション上の回路自体
    */
 
-  import com.example.scalapkg._
+  import com.example.simuration._
 
   // イベントの発生タイミングを指定
   object MySimulation extends CircuitSimulation {

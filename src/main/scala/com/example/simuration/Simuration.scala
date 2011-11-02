@@ -1,4 +1,4 @@
-package com.example.scalapkg
+package com.example.simuration
 
 /**
  * Created by IntelliJ IDEA.
