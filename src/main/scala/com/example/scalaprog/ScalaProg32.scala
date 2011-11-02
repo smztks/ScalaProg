@@ -131,6 +131,8 @@ object Sp32_04a {
   // raactは制御を返さないので、reactの引数を受け取るメッセージハンドラーは、メッセージを処理するとともに、
   // アクターの残りの仕事を調整しなければならない。
 
+  // react = 反応する
+
   import scala.actors._
   import scala.actors.Actor._
 
@@ -241,36 +243,96 @@ object Sp32_04b {
 }
 
 // アクターのコードスタイル
-object Sp32_05 {
+// アクターはブロックしてはならない
+object Sp32_05_01 {
 
-  import scala.actors._
   import scala.actors.Actor._
 
-  val sillyActor2 = actor {
-    def emoteLater() {
-      val mainActor = self
-      actor  {
-        Thread.sleep(1000)
-        mainActor ! "Emote"
+  object SillyActor2 {
+    val sillyActor2 = actor {
+      def emoteLater() {
+        val mainActor = self
+        // ヘルパーアクターが代わりにsleepすることにより、メインアクターは次の入力を待っている間もメッセージを出力できる。
+        actor  {
+          Thread.sleep(1000)
+          println("2.Send Emote message")
+          mainActor ! "Emote" // メインアクターが"Emote"を送っている。
+        }
       }
-    }
-    var emoted = 0
-    emoteLater()
-    loop {
-      react {
-        case "Emote" =>
-          println("I'm acting!")
-          emoted += 1
-          if (emoted < 5)
-            emoteLater()
-        case msg =>
-          println("Received: " + msg)
+      var emoted = 0
+      emoteLater()
+      // 以下、メインアクターの仕事
+      loop {
+        react {
+          case "Emote" =>
+            println("3.PreCall emoteLater method")
+            emoted += 1
+            if (emoted < 5)
+              emoteLater()
+            println("4.Called emoteLater method")
+          case msg =>
+            println("1.Received: " + msg)
+        }
       }
     }
   }
-  sillyActor2 ! "hi there"
 
-  println("abc")
-  
+  SillyActor2.sillyActor2 ! "hi there"
+
+  // ヘルパーアクターの設定あり：1 -> [2 -> 3 -> 4] -> [2 -> 3 -> 4] ... 順番通りに処理される。
+  // 4の処理が2の処理に先行することは、ヘルパーアクターの待ち処理とは別に動作し、reacの待ち状態になれることを意味する。
+  // ヘルパーアクターの設定なし：2 -> 1 -> [3 -> 2 -> 4] -> [3 -> 2 -> 4] ... emoteLater内のブロックされた箇所以降の処理が3と4の間の順番に入ってしまう。
+
+  println("end of: " + Thread.currentThread.getStackTrace()(1))
+}
+
+// メッセージを自己完結的にする
+object Sp32_05_04 {
+
+  import scala.actors._
+  import scala.actors.Actor._
+  import java.net.{InetAddress, UnknownHostException}
+
+  case class LookupIP(name: String, respondTo: Actor)
+  case class LookupResult(
+    name: String,
+    address: String //Option[InetAddress]
+  )
+
+  object NameResolver2 extends Actor {
+    def act() {
+      loop {
+        react {
+          case LookupIP(name, actor) =>
+            actor ! LookupResult(name, show(getIp(name)))
+        }
+      }
+    }
+
+    def getIp(name: String): Option[InetAddress] = {
+      try {
+        Some(InetAddress.getByName(name))
+      } catch {
+        case _:UnknownHostException => None
+      }
+    }
+
+    def show(x: Option[java.net.InetAddress]) =
+      x match {
+        case Some(y) => y.toString
+        case None    => "Nothing!"
+      }
+  }
+
+  NameResolver2.start()
+
+  NameResolver2 ! LookupIP("www.scala-lang.org", self)
+  self.receiveWithin(100) { case (x) => println(x) }
+  // LookupResult(www.scala-lang.org,Some(www.scala-lang.org/128.178.154.159))
+
+  NameResolver2 ! LookupIP("wwwwww.scala-lang.org", self)
+  self.receiveWithin(100) { case (x) => println(x) }
+  // LookupResult(wwwwww.scala-lang.org,None)
+
   println("end of: " + Thread.currentThread.getStackTrace()(1))
 }

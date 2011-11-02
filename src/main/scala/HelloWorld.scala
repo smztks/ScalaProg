@@ -264,7 +264,8 @@ object HelloWorld extends Application {
   //Sp32_03
   //Sp32_04a
   //Sp32_04b
-  Sp32_05
+  //Sp32_05_01
+  Sp32_05_04
 
 /*
   /* ScalaTest
