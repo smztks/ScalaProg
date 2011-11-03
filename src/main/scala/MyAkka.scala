@@ -7,6 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
+/*
 import akka.actor.Actor
 
 class MyActor extends Actor {
@@ -23,3 +24,4 @@ object MyAkka {
     myActor ! "test"
   }
 }
+ */

@@ -11,8 +11,9 @@ package com.example.scalaprog
 // 第33章 パーサーコンビネーター
 object ScalaProg33
 
-// 
+// サンプル：算術式
 object Sp33_01 {
-
+  println("abc")
+  
   println("end of: " + Thread.currentThread.getStackTrace()(1))
 }
