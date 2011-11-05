@@ -9,7 +9,7 @@ import com.example.scalapkg._
 
 // Applicationトレイトを使って処理を見やすくします
 object ExprExe {
-  def main(args: Array[String]): Unit = {
+  def main(args: Array[String]) {
     val f = new ExprFormatter
 
     //// 算術式を定義します

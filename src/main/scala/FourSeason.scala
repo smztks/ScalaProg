@@ -10,7 +10,7 @@
 import com.example.scalapkg.ChecksumAccumulator._
 
 object FourSeason {
-  def main(args: Array[String]): Unit = {
+  def main(args: Array[String]) {
     for(season <- List("fall", "winter", "spring"))
       println(season + ": " + calculate(season))
   }

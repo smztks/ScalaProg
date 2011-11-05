@@ -18,7 +18,7 @@ class MyActor extends Actor {
 }
 
 object MyAkka {
-  def main(args: Array[String]): Unit = {
+  def main(args: Array[String]) {
     val myActor = Actor.actorOf[MyActor]
     myActor.start()
     myActor ! "test"

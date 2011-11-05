@@ -10,7 +10,7 @@
 import com.example.scalaprog._
 
 object HelloWorld {
-  def main(args: Array[String]): Unit = {
+  def main(args: Array[String]) {
     // 第16章 リストの操作
     //Sp16_01         // リストリテラル
     //Sp16_02         // List型
@@ -269,7 +269,14 @@ object HelloWorld {
     //Sp32_06         // 大規模なサンプル：並列拡散イベントシミュレーション
 
     // 第33章 パーサーコンビネーター
-    Sp33_01
+    //Sp33_01         // サンプル：算術式・パーサーの実行
+    //Sp33_03         // 基本正規表現パーサー
+    //Sp33_04         // 他のパーサーの使用例：JSON
+    //Sp33_05         // パーサーの出力
+    //Sp33_06_04      // thisの別名（別名記法）
+
+    // 第34章 GUIプログラミング
+    Sp34_01
 
   /*
     /* ScalaTest

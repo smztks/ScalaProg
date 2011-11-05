@@ -15,7 +15,7 @@ import twitter4j.conf.Configuration
 import twitter4j.conf.ConfigurationBuilder
 
 object Twitter {
-  def main(args: Array[String]): Unit = {
+  def main(args: Array[String]) {
     val tsf = new TwitterStreamFactory
     println(tsf)
     //TwitterStream

@@ -10,7 +10,7 @@
 import com.example.scalapkg.Rational
 
 object RatioExe {
-  def main(args: Array[String]): Unit = {
+  def main(args: Array[String]) {
     var r1 = new Rational(1,3)  // 1/3
     var r2 = new Rational(1,4)  // 1/4
     // Orderdトレイト + compareメソッドにより評価可能

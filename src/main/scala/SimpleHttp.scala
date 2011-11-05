@@ -15,7 +15,7 @@ import org.apache.http.impl.client.DefaultHttpClient
 import java.io.{BufferedReader,InputStreamReader}
 
 object SimpleHttp {
-  def main(args: Array[String]): Unit = {
+  def main(args: Array[String]) {
     class HttpClientTest {
         def testGet() = {
           val client = new DefaultHttpClient
